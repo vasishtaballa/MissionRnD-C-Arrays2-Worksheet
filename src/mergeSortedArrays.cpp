@@ -15,6 +15,7 @@ NOTES:
 */
 
 #include <iostream>
+int Compare(char *date1, char *date2);
 
 struct transaction {
 	int amount;
@@ -22,6 +23,71 @@ struct transaction {
 	char description[20];
 };
 
-struct transaction * mergeSortedArrays(struct transaction *A, int ALen, struct transaction *B, int BLen) {
-	return NULL;
+struct transaction * mergeSortedArrays(struct transaction *A, int ALen, struct transaction *B, int BLen)
+{
+	if (A == NULL || B == NULL)
+		return NULL;
+	struct transaction *result = (struct transaction *)malloc(sizeof(transaction)*(ALen + BLen));
+	int i = 0, j = 0, k = 0, res;
+	while (i < ALen && j < BLen)
+	{
+		res = Compare(A[i].date, B[j].date);
+		if (res == 1)
+		{
+			result[k] = B[j];
+			j++;
+		}
+		else
+		{
+			result[k] = A[i];
+			i++;
+		}
+		k++;
+	}
+	if (i >= BLen)
+	{
+		while (j < BLen)
+		{
+			result[k] = B[j];
+			j++;
+			k++;
+		}
+	}
+	if (j >= ALen)
+	{
+		while (i < ALen)
+		{
+			result[k] = A[i];
+			i++;
+			k++;
+		}
+	}
+	return result;
+}
+
+int Compare(char *date1, char *date2)
+{
+	int i;
+	for (i = 6; i <= 9; i++)
+	{
+		if (date1[i] > date2[i])
+			return 1;
+		else if (date1[i] < date2[i])
+			return 2;
+	}
+	for (i = 3; i <= 4; i++)
+	{
+		if (date1[i] > date2[i])
+			return 1;
+		else if (date1[i] < date2[i])
+			return 2;
+	}
+	for (i = 0; i <= 1; i++)
+	{
+		if (date1[i] > date2[i])
+			return 1;
+		else if (date1[i] < date2[i])
+			return 2;
+	}
+	return 0;
 }
